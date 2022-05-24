@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue js Tutorial</title>
+    <script src="https://unpkg.com/vue@3.0.2"></script>
+    <style>
+        body {
+            width: 75%;
+            margin: 20px auto;
+            background: rgba(185, 185, 185, 0.7);
+        }
+
+        p,ul {
+            margin: 0;
+            padding: 0;
+        }
+        img {
+            border-radius: 80%;
+            height: 50px;
+            width: 50px;
+        }
+        li {
+            background-color: rgb(255, 254, 254);
+            list-style-type: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+         }
+
+         li.verified {
+             background: rgba(86, 84, 84, 0.75);
+             color: white;
+         }
+
+         button {
+             width: 100px;
+             padding: 10px;
+             border-radius: 8px;
+             cursor: pointer;
+             border: none;
+             transition: 0.2s;
+         } 
+
+        button.login {
+            background-color: rgb(81, 81, 245);
+            color: white;
+        }
+
+        button.login:hover {
+            color: blue;
+            background-color: white;
+            border: 2px solid blue;
+        }
+
+        button.danger {
+            background-color: red;
+            color: white;
+        }
+
+        button.danger:hover {
+            color: red;
+            background-color: white;
+            border: 2px solid red;
+        }
+
+        .header {
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <ul v-if="loggedIn">
+            <div class="header">
+                <p>id</p>
+                <p>profile picture</p>
+                <p>name</p>
+                <p>Age</p>
+                <p>email</p>
+                <p>action</p>
+            </div>
+            <li v-for="user in users" :class="{ verified: user.isVerified }">
+
+                <P>{{ user.id }}</P>
+                <img :src="user.img" :alt="user.name">
+                <p>{{ user.name }}</p>
+                <p>{{ user.age }}</p>
+                <p>{{ user.email }}</p>
+                <button @click="removeUser(user.id)" :class="{ danger: loggedIn }">Remove</button>
+            </li>
+            <button @click="toggleLogin" class="login">Logout</button>
+
+        </ul>
+        <ul v-else>
+            <button @click="toggleLogin" class="login">Login</button>
+        </ul>
+        
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
