@@ -30,6 +30,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: 1s;
          }
 
          li.verified {
@@ -67,11 +68,39 @@
             background-color: white;
             border: 2px solid red;
         }
+        button.verify {
+            background-color: rgb(0, 136, 255);
+            color: white;
+        }
 
+        button.verify:hover {
+            color: rgb(0, 136, 255);
+            background-color: white;
+            border: 2px solid rgb(0, 136, 255);
+        }
+        
         .header {
             padding: 0;
             display: flex;
             justify-content: space-between;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+        .badge {
+            padding: 5px; 
+            width: auto; 
+            border-radius: 8px; 
+            text-align: center;
+        }
+        .badge-success {
+            background-color: lime; 
+            color: black;
+        }
+        .badge-danger {
+            background-color: red; 
+            color: white;
         }
     </style>
 </head>
@@ -79,25 +108,29 @@
 
     <div id="app">
         <ul v-if="loggedIn">
-            <div class="header">
-                <p>id</p>
-                <p>profile picture</p>
-                <p>name</p>
-                <p>Age</p>
-                <p>email</p>
-                <p>action</p>
-            </div>
-            <li v-for="user in users" :class="{ verified: user.isVerified }">
-
+            <li v-for="user in filterdUsers" :class="{ verified: user.isVerified }">
+                <input type="checkbox" @click="addBulk(user)" :checked="user.isVerified">
                 <P>{{ user.id }}</P>
                 <img :src="user.img" :alt="user.name">
                 <p>{{ user.name }}</p>
                 <p>{{ user.age }}</p>
                 <p>{{ user.email }}</p>
-                <button @click="removeUser(user.id)" :class="{ danger: loggedIn }">Remove</button>
+                <span v-if="user.isVerified" :class="{'badge badge-success': user.isVerified}">Activated</span>
+                <div :class="{ 'd-none': user.isVerified }">
+                    <button @click="removeUser(user)" :class="{ danger: loggedIn }">Remove</button>
+                </div>
+                <button @click="verifyUser(user)" :class="{ verify: loggedIn }">
+                    <span v-if="user.isVerified">Reject</span>
+                    <span v-else>Verify</span>
+                </button>
             </li>
-            <button @click="toggleLogin" class="login">Logout</button>
-
+            <div style="display: flex; justify-content: space-between;">
+                <div v-if="bulkActions.length > 0" style="display: flex; justify-content: space-between;">
+                    <button style="margin-right: 20px;" @click="verifyBulk">Bulk Verify</button>
+                    <button @click="removeBulk">Bulk Delete</button>
+                </div>
+                <button @click="toggleLogin" class="login">Logout</button>
+            </div>
         </ul>
         <ul v-else>
             <button @click="toggleLogin" class="login">Login</button>
